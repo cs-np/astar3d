@@ -2,7 +2,8 @@ function AStar () {
 }
 
 AStar.prototype.process = function(node, startNode, endNode, options) {
-    
+    console.log("Start Node:", startNode);
+    console.log("End Node:", endNode);
     if (startNode.z < endNode.z) {
         var tmp = endNode;
         endNode = startNode;
@@ -39,7 +40,8 @@ AStar.prototype.process = function(node, startNode, endNode, options) {
             }
             path.push(startNode);
             startNode.path = true;
-
+            console.log("Traverse Node:", traversedNodes);
+            console.log("PATH:", path);
             return {path: path,traversedNodes: traversedNodes};
         }
         traversedNodes++;
@@ -81,7 +83,7 @@ AStar.prototype.process = function(node, startNode, endNode, options) {
             }
         }
     }
-
+    console.log("Traverse Node:", traversedNodes);
     return {path: [],traversedNodes: traversedNodes};
 };
 
@@ -257,7 +259,3 @@ AStar.prototype.getNeighbors = function(aNode, node, diagonal) {
     }
     return neighbors;
 };
-
-
-
-
