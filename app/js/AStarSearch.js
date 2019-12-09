@@ -80,8 +80,7 @@ class AStar {
         }
         path.push(startNode);
         startNode.path = true;
-        console.log("Traverse Node:", traversedNodes);
-        console.log("PATH:", path);
+
         return {path: path, traversedNodes: traversedNodes};
       }
       traversedNodes++;
@@ -119,7 +118,6 @@ class AStar {
         }
       }
     }
-    console.log("Traverse Node:", traversedNodes);
     return {path: [], traversedNodes: traversedNodes};
   }
 
@@ -311,12 +309,18 @@ for (let i = 0; i < x; i++) {
   }
 }
 
-const astar = new AStar(matrix);
-
-const startNode = matrix[0][0][2];
-const endNode = matrix[2][2][2];
+const startNodeCoordinates = {
+  x: 2,
+  y: 0,
+  z: 0
+};
+const endNodeCoordinates = {
+  x: 0,
+  y: 2,
+  z: 2
+};
 const options = {
-  heuristic: "manhatten",
+  heuristic: "euclidean",
   diagonal: false,
   heightFactor: 0.5
 };
@@ -324,4 +328,28 @@ const options = {
 // heuristic: manhatten or euclidean
 // diagonal: true or false
 // Height factor: 0.5 ,1 ,5 ,10 ,15 ,20 ,30 ,40 ,50 ,60 ,160
-console.log(astar.searchPath(startNode, endNode, options));
+
+const astar = new AStar(matrix);
+const startNode = matrix[startNodeCoordinates.x][startNodeCoordinates.y][startNodeCoordinates.z];
+const endNode = matrix[endNodeCoordinates.x][endNodeCoordinates.y][endNodeCoordinates.z];
+const result = astar.searchPath(startNode, endNode, options);
+
+// OUTPUT LOGS
+console.log("FULL MATRIX\n", matrix);
+
+console.log("=============================");
+console.log("RESULTS");
+console.log("=============================");
+console.log(`SEARCH METHOD: ${options.heuristic.toUpperCase()}`);
+console.log(`START NODE PATH: ${startNodeCoordinates.x} ${startNodeCoordinates.y} ${startNodeCoordinates.z}`);
+console.log(`END NODE PATH: ${endNodeCoordinates.x} ${endNodeCoordinates.y} ${endNodeCoordinates.z}`);
+console.log("TOTAL NODES TRAVERSED TO SEARCH OPTIMAL PATH:", result.traversedNodes);
+if (result.path.length === 0) {
+  console.log("PATH NOT FOUND");
+}
+for (p in result.path) {
+  const node = result.path[p];
+  if (node.x && node.y && node.z) {
+    console.log(`NODE PATH: ${node.x} ${node.y} ${node.z}`,);
+  }
+}
