@@ -80,7 +80,8 @@ class AStar {
         }
         path.push(startNode);
         startNode.path = true;
-
+        console.log("Traverse Node:", traversedNodes);
+        console.log("PATH:", path);
         return {path: path, traversedNodes: traversedNodes};
       }
       traversedNodes++;
@@ -118,6 +119,7 @@ class AStar {
         }
       }
     }
+    console.log("Traverse Node:", traversedNodes);
     return {path: [], traversedNodes: traversedNodes};
   }
 
@@ -294,9 +296,25 @@ class AStar {
   };
 }
 
+// CONFIG 
 const x = 3;
 const y = 3;
 const z = 3;
+const startNodeX = 0;
+const startNodeY = 0;
+const startNodeZ = 2;
+const endNodeX = 2;
+const endNodeY = 2;
+const endNodeZ = 2;
+const diagonal = false;
+const heuristic = "euclidean";
+const heightFactor = 0.5;
+// Possible values
+// heuristic: manhatten or euclidean
+// diagonal: true or false
+// Height factor: 0.5 ,1 ,5 ,10 ,15 ,20 ,30 ,40 ,50 ,60 ,160
+
+
 const matrix = [];
 
 for (let i = 0; i < x; i++) {
@@ -309,29 +327,16 @@ for (let i = 0; i < x; i++) {
   }
 }
 
-const startNodeCoordinates = {
-  x: 2,
-  y: 0,
-  z: 0
-};
-const endNodeCoordinates = {
-  x: 0,
-  y: 2,
-  z: 2
-};
-const options = {
-  heuristic: "euclidean",
-  diagonal: false,
-  heightFactor: 0.5
-};
-// Possible values
-// heuristic: manhatten or euclidean
-// diagonal: true or false
-// Height factor: 0.5 ,1 ,5 ,10 ,15 ,20 ,30 ,40 ,50 ,60 ,160
-
 const astar = new AStar(matrix);
-const startNode = matrix[startNodeCoordinates.x][startNodeCoordinates.y][startNodeCoordinates.z];
-const endNode = matrix[endNodeCoordinates.x][endNodeCoordinates.y][endNodeCoordinates.z];
+
+const startNode = matrix[startNodeX][startNodeY][startNodeZ];
+const endNode = matrix[endNodeX][endNodeY][endNodeZ];
+const options = {
+  heuristic: heuristic,
+  diagonal: diagonal,
+  heightFactor: heightFactor
+};
+// console.log(astar.searchPath(startNode, endNode, options));
 const result = astar.searchPath(startNode, endNode, options);
 
 // OUTPUT LOGS
@@ -340,9 +345,9 @@ console.log("FULL MATRIX\n", matrix);
 console.log("=============================");
 console.log("RESULTS");
 console.log("=============================");
-console.log(`SEARCH METHOD: ${options.heuristic.toUpperCase()}`);
-console.log(`START NODE PATH: ${startNodeCoordinates.x} ${startNodeCoordinates.y} ${startNodeCoordinates.z}`);
-console.log(`END NODE PATH: ${endNodeCoordinates.x} ${endNodeCoordinates.y} ${endNodeCoordinates.z}`);
+console.log(`SEARCH METHOD: ${heuristic.toUpperCase()}`);
+console.log(`START NODE PATH: ${startNodeX} ${startNodeY} ${startNodeZ}`);
+console.log(`END NODE PATH: ${endNodeX} ${endNodeY} ${endNodeZ}`);
 console.log("TOTAL NODES TRAVERSED TO SEARCH OPTIMAL PATH:", result.traversedNodes);
 if (result.path.length === 0) {
   console.log("PATH NOT FOUND");
@@ -350,6 +355,6 @@ if (result.path.length === 0) {
 for (p in result.path) {
   const node = result.path[p];
   if (node.x && node.y && node.z) {
-    console.log(`NODE PATH: ${node.x} ${node.y} ${node.z}`,);
+    console.log(`NODE PATH: ${node.x} ${node.y} ${node.z}`);
   }
 }
